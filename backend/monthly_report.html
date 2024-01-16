@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            background-color: bisque;
+            color:rgb(26, 24, 64);
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            background-color: rgb(26, 24, 94);
+            color: bisque;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 8px;
+            border: 1px solid bisque; 
+        }
+
+        th {
+            background-color: rgb(26, 24, 64); 
+        }
+
+        table table {
+            width: 100%;
+        }
+
+        table table th,
+        table table td {
+            border: 1px solid bisque; /* Add border to nested table cells */
+        }
+    </style>
+</head>
+<body>
+    <h1>Monthly Entertainment Report</h1>
+
+    <h2>Hello, {{ username }}!</h2>
+
+    <table>
+        <tr>
+            <th>Bookings Made</th>
+            <th>Ratings</th>
+        </tr>
+        <tr>
+            <td>
+                <table>
+                    <tr>
+                        <th>Show Name</th>
+                        <th>No. of Tickets Booked</th>
+                        <th>Seat Numbers</th>
+                    </tr>
+                    {% for booking in bookings_data %}
+                        <tr>
+                            <td>{{ booking_show_names[booking.show_id] }}</td>
+                            <td>{{ booking.booking_tickets_count }}</td>
+                            <td>{{ booking.seat_range }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </td>
+            <td>
+                <table>
+                    <tr>
+                        <th>Show Name</th>
+                        <th>Rating</th>
+                    </tr>
+                    {% for rating in ratings %}
+                        <tr>
+                            <td>{{ booking_show_names[rating.show_id] }}</td>
+                            <td>{{ rating.user_rating }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

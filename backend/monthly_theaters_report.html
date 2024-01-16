@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Report</title>
+    <style>
+        body {
+            background-color: bisque;
+            color: rgb(26, 24, 64);
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            background-color: rgb(26, 24, 94);
+            color: bisque;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 8px;
+            border: 1px solid bisque; 
+        }
+
+        th {
+            background-color: rgb(26, 24, 64); 
+        }
+
+        table table {
+            width: 100%;
+        }
+
+        table table th,
+        table table td {
+            border: 1px solid bisque; /* Add border to nested table cells */
+        }
+    </style>
+</head>
+<body>
+    <h1>Admin Report : {{ user.username }} for {{ current_month }}</h1>
+
+    <h2>Theaters and Shows</h2>
+    {% for theater in theater_data %}
+    <h3>Theater: {{ theater.theater_name }}</h3>
+    <h3>Theater Capacity: {{ theater.theater_capacity }}</h3>
+    <h3>Total Theater Revenue: ₹ {{ theater.theater_total_revenue }}</h3>
+    <table>
+        <tr>
+            <th>Show Name</th>
+            <th>Show Timing</th>
+            <th>Show Duration</th>
+            <th>Show Ratings</th>
+            <th>Total Bookings</th>
+            <th>Show Revenue</th>
+        </tr>
+        {% for show in theater.shows %}
+        <tr>
+            <td>{{ show.show_name }}</td>
+            <td>{{ show.show_time }}</td>
+            <td>{{ show.show_duration }}</td>
+            <td>{{ show.show_ratings }}</td>
+            <td>{{ show.show_total_bookings }}</td>
+            <td>₹ {{ show.show_total_revenue }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endfor %}
+
+    <h2>Admin Total Revenue: ₹ {{ total_admin_revenue }}</h2>
+</body>
+</html>

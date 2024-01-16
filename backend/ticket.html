@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ticket</title>
+    <style>
+        /* Define your ticket styles here */
+        body {
+            background-color: #f2f2f2;
+            font-family: Arial, sans-serif;
+        }
+        
+        .ticket {
+            max-width: 700px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #000;
+            text-align: center;
+            color: #fff;
+            background-color: #1a185e;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .ticket h2 {
+            margin-top: 0;
+            font-size: 24px;
+        }
+        
+        .ticket p {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="ticket">
+        <h2>Theater: {{ theater_name }}</h2>
+        <p><strong>Ticket for Show:</strong> {{ show_name }}</p>
+        <p><strong>Date:</strong> {{ show_time }}</p>
+        <p><strong>Seat Numbers:</strong> {{ seat_range }}</p>
+    </div>
+</body>
+</html>

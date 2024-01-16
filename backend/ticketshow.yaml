@@ -1,0 +1,515 @@
+api_version: "1.0"
+title: "My Flask API"
+description: "API for managing theaters, shows, and bookings."
+version: "1.0.0"
+
+paths:
+  /admin_signup:
+    post:
+      summary: "Admin Signup"
+      description: "Create a new admin user account."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                username:
+                  type: string
+                general_signup:
+                  type: boolean
+      responses:
+        '200':
+          description: "User signed up successfully!"
+        '400':
+          description: "Bad Request - Email, password, and username are required."
+
+  /general_signup:
+    post:
+      summary: "General Signup"
+      description: "Create a new general user account."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                username:
+                  type: string
+      responses:
+        '200':
+          description: "User signed up successfully!"
+        '400':
+          description: "Bad Request - Email, password, and username are required."
+
+  /users/{email}:
+    get:
+      summary: "Get User Details"
+      description: "Get user details by email."
+      parameters:
+        - name: "email"
+          in: path
+          description: "User email"
+          required: true
+          schema:
+            type: string
+            format: email
+      responses:
+        '200':
+          description: "Success - User details retrieved."
+        '404':
+          description: "Not Found - User not found."
+
+  /admin_dashboard/{email}:
+    get:
+      summary: "Admin Dashboard"
+      description: "Get theaters managed by the admin user."
+      parameters:
+        - name: "email"
+          in: path
+          description: "Admin user email"
+          required: true
+          schema:
+            type: string
+            format: email
+      responses:
+        '200':
+          description: "Success - Admin dashboard retrieved."
+        '403':
+          description: "Forbidden - You are not authorized to access this resource."
+        '404':
+          description: "Not Found - User not found."
+
+  /user_dashboard/{email}:
+    get:
+      summary: "User Dashboard"
+      description: "Get shows booked by the user."
+      parameters:
+        - name: "email"
+          in: path
+          description: "User email"
+          required: true
+          schema:
+            type: string
+            format: email
+      responses:
+        '200':
+          description: "Success - User dashboard retrieved."
+        '403':
+          description: "Forbidden - You are not authorized to access this resource."
+        '404':
+          description: "Not Found - User not found."
+
+  /{user_id}/add_theater:
+    post:
+      summary: "Add Theater"
+      description: "Create a new theater for a user."
+      parameters:
+        - name: "user_id"
+          in: path
+          description: "User ID"
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                theater_name:
+                  type: string
+                theater_pic:
+                  type: string
+                  format: byte
+                theater_address:
+                  type: string
+                theater_capacity:
+                  type: integer
+                  format: int32
+      responses:
+        '200':
+          description: "Success - Theater added."
+        '400':
+          description: "Bad Request - Please fill in all details."
+        '403':
+          description: "Forbidden - You are not authorized to access this resource."
+
+  /users/{email}/theaters/{theater_id}:
+    get:
+      summary: "Get Theater Details"
+      description: "Get details of a theater by theater ID."
+      parameters:
+        - name: "email"
+          in: path
+          description: "User email"
+          required: true
+          schema:
+            type: string
+            format: email
+        - name: "theater_id"
+          in: path
+          description: "Theater ID"
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: "Success - Theater details retrieved."
+        '404':
+          description: "Not Found - Theater not found."
+
+  /{user_id}/{theater_id}/theater/add_show:
+    post:
+      summary: "Add Show"
+      description: "Create a new show for a theater."
+      parameters:
+        - name: "user_id"
+          in: path
+          description: "User ID"
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: "theater_id"
+          in: path
+          description: "Theater ID"
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                show_name:
+                  type: string
+                show_pic:
+                  type: string
+                  format: byte
+                show_duration:
+                  type: integer
+                  format: int32
+                show_timing:
+                  type: string
+                  format: date-time
+                show_description:
+                  type: string
+                show_trailer:
+                  type: string
+                show_price:
+                  type: string
+      responses:
+        '200':
+          description: "Success - Show added."
+        '400':
+          description: "Bad Request - Please fill in all details."
+        '403':
+          description: "Forbidden - You are not authorized to access this resource."
+
+  /show/{show_id}:
+    get:
+      summary: "Get Show Details"
+      description: "Get details of a show by show ID."
+      parameters:
+        - name: "show_id"
+          in: path
+          description: "Show ID"
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: "Success - Show details retrieved."
+        '404':
+          description: "Not Found - Show not found."
+
+  /book_show/{user_id}/{show_id}:
+    post:
+      summary: "Book Show"
+      description: "Book a show for a user."
+      parameters:
+        - name: "user_id"
+          in: path
+          description: "User ID"
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: "show_id"
+          in: path
+          description: "Show ID"
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                  booking_tickets_count:
+                  type: integer
+                  format: int32
+      responses:
+        '200':
+          description: "Success - Show booked."
+        '400':
+          description: "Bad Request - Please enter a valid number of tickets."
+        '403':
+          description: "Forbidden - You are not authorized to access this resource."
+        '404':
+          description: "Not Found - Show not found."
+
+  /cancel_booking/{user_id}/{booking_id}:
+    delete:
+      summary: "Cancel Booking"
+      description: "Cancel a booking for a user."
+      parameters:
+        - name: "user_id"
+          in: path
+          description: "User ID"
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: "booking_id"
+          in: path
+          description: "Booking ID"
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: "Success - Booking canceled."
+        '403':
+          description: "Forbidden - You are not authorized to access this resource."
+        '404':
+          description: "Not Found - Booking not found."
+
+  /theaters:
+    get:
+      summary: "Get All Theaters"
+      description: "Get details of all theaters."
+      responses:
+        '200':
+          description: "Success - All theaters retrieved."
+
+  /theaters/{theater_id}:
+    get:
+      summary: "Get Theater Details"
+      description: "Get details of a theater by theater ID."
+      parameters:
+        - name: "theater_id"
+          in: path
+          description: "Theater ID"
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: "Success - Theater details retrieved."
+        '404':
+          description: "Not Found - Theater not found."
+
+  /shows:
+    get:
+      summary: "Get All Shows"
+      description: "Get details of all shows."
+      responses:
+        '200':
+          description: "Success - All shows retrieved."
+
+  /shows/{show_id}:
+    get:
+      summary: "Get Show Details"
+      description: "Get details of a show by show ID."
+      parameters:
+        - name: "show_id"
+          in: path
+          description: "Show ID"
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: "Success - Show details retrieved."
+        '404':
+          description: "Not Found - Show not found."
+    /export_shows_csv/{theater_id}:
+    post:
+      summary: "Export Theater Shows CSV (Admin)"
+      description: "Export theater shows as CSV for a given theater ID (Admin only)."
+      parameters:
+        - name: "theater_id"
+          in: path
+          description: "Theater ID"
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: "Success - CSV file exported."
+        '401':
+          description: "Unauthorized - Only Admins can access this resource."
+
+  /export_user_csv/{user_id}:
+    post:
+      summary: "Export User CSV"
+      description: "Export user data as CSV for a given user ID."
+      parameters:
+        - name: "user_id"
+          in: path
+          description: "User ID"
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: "Success - CSV file exported."
+        '401':
+          description: "Unauthorized - You are not authorized to access this resource."
+
+  /export_report/{user_id}:
+    post:
+      summary: "Export User Report as PDF (General User)"
+      description: "Export the complete user report as a PDF for a given user ID (General User only)."
+      parameters:
+        - name: "user_id"
+          in: path
+          description: "User ID"
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: "Success - Report exported as PDF."
+        '401':
+          description: "Unauthorized - Only General Users can access this resource."
+
+  /export_admin_report/{user_id}:
+    post:
+      summary: "Export Admin Report as PDF (Admin)"
+      description: "Export the complete admin report as a PDF for a given user ID (Admin only)."
+      parameters:
+        - name: "user_id"
+          in: path
+          description: "User ID"
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: "Success - Report exported as PDF."
+        '401':
+          description: "Unauthorized - Only Admins can access this resource."
+
+  /download_ticket/{booking_id}:
+    post:
+      summary: "Download Ticket as PDF"
+      description: "Download the ticket as a PDF for a given booking ID."
+      parameters:
+        - name: "booking_id"
+          in: path
+          description: "Booking ID"
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: "Success - Ticket downloaded as PDF."
+        '401':
+          description: "Unauthorized - You are not authorized to access this resource."
+
+  /predict_bookings/{show_id}:
+    post:
+      summary: "Predict Show Bookings"
+      description: "Predict the number of bookings for a given show ID based on historical data (Admin/General User)."
+      parameters:
+        - name: "show_id"
+          in: path
+          description: "Show ID"
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: "Success - Bookings predicted."
+        '400':
+          description: "Bad Request - Insufficient data for prediction."
+        '401':
+          description: "Unauthorized - Only Admins and General Users can access this resource."
+
+  /revenue/{user_id}:
+    get:
+      summary: "Get Revenue Graphs"
+      description: "Get revenue graphs for all shows in each theater owned by a user."
+      parameters:
+        - name: "user_id"
+          in: path
+          description: "User ID"
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: "Success - Revenue graphs retrieved."
+        '403':
+          description: "Forbidden - You are not authorized to access this resource."
+
+  /get-graph-image/{theater_name}:
+    get:
+      summary: "Get Revenue Graph Image"
+      description: "Get the image of the revenue graph for a specific theater."
+      parameters:
+        - name: "theater_name"
+          in: path
+          description: "Theater Name"
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: "Success - Graph image retrieved."
+        '404':
+          description: "Not Found - Graph image not found."
+
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
